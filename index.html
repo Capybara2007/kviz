@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Квиз: Примена Математике</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      text-align: center;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    .question {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .question h3 {
+      margin-bottom: 10px;
+    }
+
+    .answers button {
+      display: block;
+      margin: 5px 0;
+      padding: 12px;
+      width: 100%;
+      font-size: 1em;
+      background-color: #ffffff20;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .answers button:hover {
+      background-color: #ffffff40;
+      transform: scale(1.02);
+    }
+
+    .answers button.correct {
+      background-color: #4CAF50 !important;
+    }
+
+    .answers button.incorrect {
+      background-color: #f44336 !important;
+    }
+
+    #result {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 30px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 15px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Квиз: Примена Математике у Пракси</h1>
+  <div id="quiz"></div>
+  <div id="result"></div>
+  <script>
+    const questions = [
+      {
+        q: "Која је основна формула за разређивање узорака?",
+        a: ["V = m / ρ", "C₁V₁ = C₂V₂", "F = ma", "BMI = m/h²"],
+        correct: 1
+      },
+      {
+        q: "Шта означава R² у статистици?",
+        a: ["Запремину раствора", "Време реакције", "Прецизност модела", "Просек узорака"],
+        correct: 2
+      },
+      {
+        q: "Колико процената података се налази унутар ±1 стандардне девијације?",
+        a: ["50%", "68%", "95%", "99%"],
+        correct: 1
+      },
+      {
+        q: "Шта приказује ROC крива?",
+        a: ["Везу масе и висине", "Осетљивост и специфичност", "Запремину раствора", "pH вредност"],
+        correct: 1
+      },
+      {
+        q: "Колико износи BMI за особу од 75 кг и 1.80 м?",
+        a: ["20.5", "23.15", "25.3", "27.9"],
+        correct: 1
+      },
+      {
+        q: "Шта је просек?",
+        a: ["Најчешћа вредност", "Средина свих вредности", "Збир вредности подељен бројем", "Највећа вредност"],
+        correct: 2
+      },
+      {
+        q: "Која AUC вредност указује на идеалну тачност?",
+        a: ["0.5", "0.75", "0.9", "1.0"],
+        correct: 3
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[current];
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = `
+        <div class="question">
+          <h3>Питање ${current + 1}: ${q.q}</h3>
+          <div class="answers">
+            ${q.a.map((answer, i) =>
+              `<button onclick="answer(this, ${i})">${answer}</button>`
+            ).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function answer(button, index) {
+      const buttons = document.querySelectorAll('.answers button');
+      buttons.forEach(btn => btn.disabled = true);
+
+      const correctIndex = questions[current].correct;
+      if (index === correctIndex) {
+        button.classList.add('correct');
+        score++;
+      } else {
+        button.classList.add('incorrect');
+        buttons[correctIndex].classList.add('correct');
+      }
+
+      setTimeout(() => {
+        current++;
+        if (current < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById("quiz").innerHTML = "";
+          document.getElementById("result").innerText =
+            `Крај! Освојили сте ${score} од ${questions.length} поена.`;
+        }
+      }, 1000);
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
